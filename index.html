@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fotoğrafçı Portfolyo</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    padding: 0;
+
+    font-family: Arial, sans-serif;
+    background: #0d0d0d;
+    color: white;
+	overflow-x: hidden;
+}
+
+/* HERO */
+.hero {
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    position: relative;
+    text-align: center;
+
+    background-size: contain;
+    background-position: center;
+ 	background-color: #111; /* fallback */
+	background-repeat: no-repeat;
+    transition: background-image 1s ease-in-out;
+}
+
+/* karartma efekti */
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 2;
+}
+
+.hero-overlay h1 {
+    font-size: 42px;
+    margin: 0;
+}
+
+.hero-overlay p {
+    opacity: 0.8;
+}
+
+
+/* MENU */
+nav {
+    text-align: center;
+    padding: 20px;
+}
+
+nav button {
+    background: none;
+    border: 1px solid white;
+    color: white;
+    padding: 8px 15px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+nav button:hover {
+    background: white;
+    color: black;
+}
+
+/* GALLERY GRID */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    padding: 20px;
+}
+
+
+/* ITEM */
+.item {
+    height: 180px;
+    background: #111;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+}
+
+/* IMAGE */
+.item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.35s ease, opacity 0.35s ease;
+}
+
+/* HOVER */
+.item:hover img {
+    transform: scale(1.08);
+    opacity: 0.9;
+}
+
+/* OVERLAY TEXT */
+.overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.item:hover .overlay {
+    opacity: 1;
+}
+
+
+/* LIGHTBOX */
+.lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+     z-index: 99999;
+}
+
+.lightbox img {
+    max-width: 90%;
+    max-height: 80%;
+}
+
+.caption {
+    margin-top: 10px;
+    opacity: 0.8;
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 30px;
+    cursor: pointer;
+}
+/* LEFT SIDEBAR */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 220px;
+    height: 100vh;
+    background: #111;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.sidebar h3 {
+    margin-top: 0;
+    font-size: 16px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+}
+
+.sidebar button {
+    display: block;
+    width: 100%;
+    margin: 8px 0;
+    background: none;
+    border: 1px solid #444;
+    color: white;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.sidebar button:hover {
+    background: white;
+    color: black;
+}
+
+.sidebar button.active {
+    background: #25D366;
+    color: #000;
+    font-weight: bold;
+    border: 1px solid #25D366;
+    box-shadow: 0 0 12px rgba(37, 211, 102, 0.6);
+}
+
+.sidebar button.active:hover {
+    background: #1ebe5d;
+    color: black;
+}
+
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 220px;
+    height: 100vh;
+    background: #111;
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+
+	box-sizing: border-box;
+}
+#categoryMenu {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+
+.sidebar-footer {
+    margin-top: auto;
+    padding: 15px;
+    border-top: 1px solid #333;
+    background: linear-gradient(to top, #111, transparent);
+    text-align: center;
+
+}
+.sidebar-footer h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.sidebar-footer p {
+    margin: 5px 0 0;
+    font-size: 12px;
+    color: #aaa;
+    opacity: 1;
+}
+/* SHIFT MAIN CONTENT */
+.hero, nav, .gallery {
+    margin-left: 240px;
+}
+
+/* LIGHTBOX RIGHT PANEL */
+.lightbox-content {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.lightbox-right {
+    background: #111;
+    padding: 20px;
+    border-radius: 10px;
+    min-width: 220px;
+}
+
+.lightbox-right input {
+    width: 60px;
+    padding: 5px;
+    margin-top: 5px;
+}
+
+/* CART */
+.cart {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 250px;
+    height: 100vh;
+    background: #111;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.cart h3 {
+    margin-top: 0;
+}
+
+.cart-item {
+    border-bottom: 1px solid #333;
+    padding: 10px 0;
+    font-size: 14px;
+}
+
+#cartCount {
+    background: red;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 50%;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+/* TOAST POPUP */
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #25D366;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 6px;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: 0.3s ease;
+    z-index: 9999;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.add-cart-btn {
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px;
+    background: #ffcc00;
+    color: black;
+    border: none;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: 0.2s ease;
+}
+
+.add-cart-btn:hover {
+    background: #ffd633;
+    transform: scale(1.03);
+}
+
+.add-cart-btn:active {
+    transform: scale(0.98);
+}
+
+/* RESPONSIVE */
+@media(max-width:1200px){
+    .gallery { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media(max-width:800px){
+    .gallery { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media(max-width:500px){
+    .gallery { grid-template-columns: repeat(1, 1fr); }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 204, 0, 0.6);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px 5px rgba(255, 204, 0, 0.3);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 204, 0, 0);
+    }
+}
+
+.pulse {
+    animation: pulse 0.4s ease;
+}
+
+.plus-one {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #25D366;
+    color: white;
+    padding: 5px 8px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0.5);
+    animation: plusAnim 0.6s ease forwards;
+    pointer-events: none;
+}
+
+.toast-inline {
+    margin-top: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 6px;
+
+    background: rgba(0, 0, 0, 0.6);
+    color: #00ff88;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    opacity: 0;
+    transform: translateY(5px);
+    transition: 0.25s ease;
+
+    /* ✨ GLOW EKLENDİ */
+    box-shadow: 0 0 0 rgba(0, 255, 136, 0);
+}
+
+.toast-inline.show {
+    opacity: 0.95;
+    transform: translateY(0);
+
+    /* 💥 GLOW ANİMASYONU */
+    box-shadow: 0 0 12px rgba(0, 255, 136, 0.6),
+                0 0 24px rgba(0, 255, 136, 0.3);
+    animation: glowPulse 0.6s ease;
+}
+
+.main {
+    margin-left: 220px;
+    margin-right: 250px;
+    min-height: 100vh;
+ box-sizing: border-box;
+}
+
+@keyframes glowPulse {
+    0% {
+        box-shadow: 0 0 0 rgba(0, 255, 136, 0);
+    }
+    50% {
+        box-shadow: 0 0 18px rgba(0, 255, 136, 0.8),
+                    0 0 30px rgba(0, 255, 136, 0.4);
+    }
+    100% {
+        box-shadow: 0 0 12px rgba(0, 255, 136, 0.6),
+                    0 0 24px rgba(0, 255, 136, 0.3);
+    }
+}
+
+
+/* =========================
+   📱 MOBILE PRO UX
+========================= */
+
+/* =========================
+   📱 MOBILE FIX (DOĞRU HAL)
+========================= */
+
+@media (max-width: 768px) {
+
+    /* layout reset */
+    .hero,
+    nav,
+    .gallery,
+    .main {
+        margin: 0 !important;
+    }
+
+    /* sidebar üstte */
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+
+    /* gallery 2 kolon */
+    .gallery {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 10px;
+    }
+
+    /* cart offcanvas */
+    .cart {
+        position: fixed;
+        right: -100%;
+        top: 0;
+        width: 85%;
+        height: 100vh;
+        transition: 0.3s ease;
+        z-index: 9999;
+    }
+
+    .cart.open {
+        right: 0;
+    }
+
+    /* lightbox fix */
+    .lightbox-content {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+   .lightbox img {
+        max-height: 55vh;
+        width: 100%;
+        object-fit: contain;
+    }
+
+    .lightbox-right {
+        width: 100%;
+    }
+
+    /* cart button fix */
+    .add-cart-btn {
+        position: sticky;
+        bottom: 0;
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero, nav, .gallery, .main {
+        margin: 0 !important;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .close {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+
+    z-index: 100000; /* 🔥 EN ÜST */
+
+    color: white;
+    background: rgba(0,0,0,0.6);
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    font-size: 30px;
+}
+}
+
+@media (max-width: 768px) {
+
+    .sidebar {
+        transform: translateX(-100%);
+        transition: 0.3s ease;
+        z-index: 9999;
+    }
+
+    .cart {
+        transform: translateX(100%);
+        transition: 0.3s ease;
+        z-index: 9999;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .cart.open {
+        transform: translateX(0);
+    }
+
+    .main {
+        margin: 0;
+    }
+}
+
+.mobile-top-bar {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .mobile-top-bar {
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+         z-index: 10002;
+        background: #111;
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .mobile-top-bar button {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        background: #222;
+        color: white;
+        font-weight: bold;
+    }
+
+    body {
+        padding-top: 50px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        transform: translateX(-100%);
+        transition: 0.3s;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+}
+
+
+
+</style>
+</head>
+
+<body>
+<script src="images.js"></script>
+<script src="categories.js"></script>
+
+<!-- HERO -->
+<div class="hero" id="hero"></div>
+
+
+<!-- MENU -->
+
+
+<!-- GALLERY -->
+<div class="gallery" id="gallery"></div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" class="lightbox">
+    <span class="close" onclick="closeLightbox()">✕</span>
+
+    <div class="lightbox-content">
+
+        <img id="lightbox-img">
+
+        <div class="lightbox-right">
+	<div id="toastInline" class="toast-inline"></div>
+            <p><b>Stok Kodu:</b> <span id="stockCode"></span></p>
+
+            <p>
+                <b>Adet:</b><br>
+                <input type="number" id="qty" value="1" min="1">
+            </p>
+
+            <button onclick="addToCart()" class="add-cart-btn">
+    Sepete Ekle
+</button>
+
+            
+        </div>
+
+    </div>
+<div id="toast" class="toast">Ürün sepete eklendi</div>
+</div><!-- SIDEBAR -->
+<div class="sidebar">
+    <h3>Kategoriler</h3>
+    <div id="categoryMenu"></div>
+
+    <!-- 👇 EN ALT LOGO -->
+    <div class="sidebar-footer">
+        <h2>ATA3DTR</h2>
+        <p>Hayal Et, Boya</p>
+    </div>
+</div>
+
+<div class="main">
+    <div class="hero" id="hero"></div>
+    <div class="gallery" id="gallery"></div>
+</div>
+
+
+<!-- CART -->
+<div class="cart">
+    <h3>Sepet (<span id="cartCount">0</span> Adet)</h3>
+    <div id="cartItems"></div>
+
+    <button onclick="sendWhatsApp()"
+        style="
+            width: 100%;
+            margin-top: 15px;
+            padding: 12px;
+            background: #25D366;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: bold;
+        ">
+        WhatsApp ile Sipariş Ver
+    </button>
+</div>
+
+<div class="mobile-top-bar">
+    <button onclick="toggleSidebar()">☰ Kategoriler</button>
+    <button onclick="toggleCart()">🛒 Sepet</button>
+</div>
+
+
+<script>
+
+const heroImages = [
+    "images/hero/1.png",
+    "images/hero/2.png",
+    "images/hero/3.png",
+    "images/hero/4.png"
+];
+
+let heroIndex = 0;
+
+function changeHeroBackground() {
+    const hero = document.getElementById("hero");
+
+    const img = new Image();
+    const currentImage = heroImages[heroIndex];
+
+    img.src = currentImage;
+
+    img.onload = () => {
+        hero.style.backgroundImage = `url('${currentImage}')`;
+    };
+
+    heroIndex = (heroIndex + 1) % heroImages.length;
+}
+
+
+function toggleSidebar() {
+    document.querySelector(".sidebar").classList.toggle("open");
+}
+
+function toggleCart() {
+    document.querySelector(".cart").classList.toggle("open");
+}
+
+function openLightbox(src, text) {
+    document.getElementById("lightbox-img").src = src;
+    document.getElementById("stockCode").innerText = text;
+
+    let lb = document.getElementById("lightbox");
+    lb.style.display = "flex"; // desktop için
+    lb.classList.add("active"); // mobil için
+
+    currentItem = {
+        name: text,
+        src: src
+    };
+}
+
+function closeLightbox() {
+    let lb = document.getElementById("lightbox");
+    lb.style.display = "none";
+    lb.classList.remove("active");
+}
+
+// ilk yükleme
+changeHeroBackground();
+
+// 4 saniyede bir değiş
+setInterval(changeHeroBackground, 4000);
+
+
+/* FILTER */
+let activeCategory = "all";
+
+function filter(type) {
+
+    activeCategory = type;
+
+    let items = document.querySelectorAll('.item');
+
+    items.forEach(item => {
+        if (type === "all") {
+            item.style.display = "block";
+        } else {
+            item.style.display = item.dataset.type === type ? "block" : "none";
+        }
+    });
+
+    updateActiveButtons();
+}
+
+
+/* LIGHTBOX */
+let currentItem = null;
+
+
+function buildMenu() {
+    let menu = document.getElementById("categoryMenu");
+
+    categories.forEach(cat => {
+        let btn = document.createElement("button");
+
+        btn.dataset.category = cat; // ⭐ KRİTİK
+
+        if (cat === "all") {
+            btn.innerText = "Hepsi";
+        } else {
+            btn.innerText = cat.charAt(0).toUpperCase() + cat.slice(1);
+        }
+
+        btn.onclick = () => filter(cat);
+
+        menu.appendChild(btn);
+    });
+}
+buildMenu();
+
+
+function updateActiveButtons() {
+    let buttons = document.querySelectorAll("#categoryMenu button");
+
+    buttons.forEach(btn => {
+
+        let category = btn.dataset.category;
+
+        if (category === activeCategory) {
+            btn.classList.add("active");
+        } else {
+            btn.classList.remove("active");
+        }
+    });
+}
+function showToast(message) {
+    let toast = document.getElementById("toast");
+    toast.innerText = message;
+    toast.classList.add("show");
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2000);
+}
+function closeLightbox() {
+    document.getElementById("lightbox").style.display = "none";
+}
+
+function sendWhatsApp() {
+
+    if (cart.length === 0) {
+        alert("Sepet boş!");
+        return;
+    }
+
+    let message = "Sipariş Detayı:\n\n";
+
+    cart.forEach(item => {
+        message += "- " + item.name + " x " + item.qty + "\n";
+    });
+
+    let phone = "905448040804"; // kendi numaran
+
+    let url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
+
+    window.open(url, "_blank");
+}
+
+function updateCartCount() {
+    let total = 0;
+
+    cart.forEach(item => {
+        total += parseInt(item.qty);
+    });
+
+    document.getElementById("cartCount").innerText = total;
+}
+
+
+function clearCart() {
+    cart = [];
+    renderCart();
+}
+
+let cart = [];
+
+function addToCart() {
+
+    if (!currentItem) return;
+
+    let qty = parseInt(document.getElementById("qty").value) || 1;
+
+    let existing = cart.find(item => item.name === currentItem.name);
+
+    if (existing) {
+        existing.qty = parseInt(existing.qty) + qty;
+    } else {
+        cart.push({
+            name: currentItem.name,
+            qty: qty
+        });
+    }
+
+    renderCart();
+    showInlineToast("Ürün sepete eklendi");
+
+    // 💥 +1 ANİMASYONU
+    let lightbox = document.querySelector(".lightbox-content");
+
+    let plus = document.createElement("div");
+    plus.className = "plus-one";
+    plus.innerText = "+1";
+
+    lightbox.appendChild(plus);
+
+    setTimeout(() => {
+        plus.remove();
+    }, 600);
+}
+
+
+function changeQty(index, value) {
+
+    cart[index].qty = parseInt(cart[index].qty) + value;
+
+    if (cart[index].qty <= 0) {
+        cart.splice(index, 1);
+    }
+
+    renderCart();
+}
+
+function showInlineToast(message) {
+    let toast = document.getElementById("toastInline");
+
+    toast.innerHTML = "✔ " + message;
+
+    toast.classList.add("show");
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 1500);
+}
+
+
+
+function renderCart() {
+
+    let container = document.getElementById("cartItems");
+    container.innerHTML = "";
+
+    if (cart.length === 0) {
+        container.innerHTML = "<p>Sepet boş</p>";
+        updateCartCount();
+        return;
+    }
+
+    cart.forEach((item, index) => {
+
+        let div = document.createElement("div");
+        div.className = "cart-item";
+
+        let name = document.createElement("span");
+        name.innerText = item.name;
+
+        let controls = document.createElement("div");
+        controls.style.display = "flex";
+        controls.style.alignItems = "center";
+        controls.style.gap = "8px";
+
+        let minus = document.createElement("button");
+        minus.innerText = "-";
+        minus.onclick = () => changeQty(index, -1);
+
+        let qty = document.createElement("span");
+        qty.innerText = item.qty;
+
+        let plus = document.createElement("button");
+        plus.innerText = "+";
+        plus.onclick = () => changeQty(index, 1);
+
+        let del = document.createElement("span");
+        del.innerText = "❌";
+        del.style.cursor = "pointer";
+        del.style.color = "red";
+        del.onclick = () => {
+            cart.splice(index, 1);
+            renderCart();
+        };
+
+        controls.appendChild(minus);
+        controls.appendChild(qty);
+        controls.appendChild(plus);
+        controls.appendChild(del);
+
+        div.appendChild(name);
+        div.appendChild(controls);
+
+        container.appendChild(div);
+    });
+
+    updateCartCount();
+}
+function deleteItem(index) {
+
+    let confirmDelete = confirm("Bu ürünü sepetten silmek istiyor musun?");
+
+    if (!confirmDelete) return;
+
+    cart.splice(index, 1);
+
+    renderCart();
+}
+
+function toggleCart() {
+    document.querySelector(".cart").classList.toggle("open");
+}
+
+// mobil sayaç sync
+function updateCartCount() {
+    let total = 0;
+
+    cart.forEach(item => {
+        total += parseInt(item.qty);
+    });
+
+    document.getElementById("cartCount").innerText = total;
+
+    let mobile = document.getElementById("cartCountMobile");
+    if (mobile) mobile.innerText = total;
+}
+
+/* AUTO GALLERY */
+const gallery = document.getElementById("gallery");
+
+images.forEach((imgData, index) => {
+
+    let item = document.createElement("div");
+    item.className = "item";
+
+    item.dataset.type = imgData.category;
+
+    let img = document.createElement("img");
+    img.src = "images/products/" + imgData.file;   // ✅ BURASI KRİTİK DÜZELTME
+    img.loading = "lazy";
+
+    let overlay = document.createElement("div");
+    overlay.className = "overlay";
+
+    let cleanName = imgData.file.split("/").pop().replace(/\.[^/.]+$/, "");
+    overlay.innerText = cleanName;
+
+    item.appendChild(img);
+    item.appendChild(overlay);
+
+    item.onclick = function () {
+        openLightbox(img.src, cleanName);
+    };
+
+    gallery.appendChild(item);
+});
+
+window.onload = function () {
+    filter("all");
+};
+
+
+</script>
+<div class="cart-toggle" onclick="toggleCart()">
+🛒 Sepet (<span id="cartCountMobile">0</span>)
+</div>
+</body>
+</html>
